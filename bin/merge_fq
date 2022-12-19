@@ -1,0 +1,152 @@
+#!/usr/local/bin/Rscript
+
+# init ----
+
+a <- new.env(parent = emptyenv())
+renv::activate("~/proj/SKmagUtilsR")
+
+suppressPackageStartupMessages(library(optparse))
+suppressPackageStartupMessages(library(glue))
+suppressPackageStartupMessages(library(openxlsx))
+suppressPackageStartupMessages(library(rlang))
+suppressPackageStartupMessages(library(tibble))
+suppressPackageStartupMessages(library(tidyr))
+suppressPackageStartupMessages(library(stringr))
+suppressPackageStartupMessages(library(dplyr))
+suppressPackageStartupMessages(library(fs))
+suppressPackageStartupMessages(library(vroom))
+
+pkgload::load_all(path = "~/proj/SKmagUtilsR", export_all = FALSE)
+
+# args ----
+
+arg_from_cmd <-
+  list(
+    make_option(
+      c("--workdir"),
+      default = glue::glue("/data1/suna/merge_fq/"),
+      help = "Output dir path. [default %default]"
+    ),
+    make_option(
+      c("-i", "--input"),
+      help =
+        "
+        Input file path.
+        Input file should be a .xlsx workbook with the first worksheet
+        containing following columns:
+        - 'RUN': run id,
+        - '样本编号': sample id,
+        - 'Barcode 2 ID': barcode id for this sample
+        "
+    ),
+    make_option(
+      c("--fqdir"),
+      default = "/data1/Mgiseq2000/R2100410220091/",
+      help = "Where to search for the input fq files. [default %default]"
+    ),
+    make_option(
+      c("-o", "--outdir"),
+      default = glue::glue("./output_{my_stamp(cnow())}"),
+      help =
+        "
+        Output dir path.
+        If a relative path is given, it is relative to the `workdir`.
+        [default %default]
+        "
+    ),
+    make_option(
+      c("-n", "--nthreads"),
+      default = 1L,
+      help = "Max threads this script can use. [default %default]"
+    ),
+    make_option(
+      c("--dry_run"), default = FALSE, action = "store_true",
+      help = "Add this tag to activate dry run mode. [default %default]"
+    )
+  ) %>%
+  OptionParser(
+    usage = "Usage: %prog [options]",
+    description = str_c(
+      "Description: Cat fastq files with same barcode together."
+    ),
+    option_list = .
+  ) %>%
+  parse_args()
+
+a$pwd <- arg_from_cmd$workdir %>% dir_create() %>% path_real()
+setwd(a$pwd)
+
+a$input <- arg_from_cmd$input %>% path_real()
+a$dir_fq <- arg_from_cmd$fqdir %>% path_real()
+a$dir_out <- arg_from_cmd$outdir %>% dir_create() %>% path_real()
+
+a$nthreads <- arg_from_cmd$nthreads
+a$dry_run <- arg_from_cmd$dry_run
+
+# main ----
+
+# debug
+# setwd("/data1/suna/merge_fq/")
+# a$input <-
+#   "/data1/suna/merge_fq/20221208湖州申科NGS上机样本信息表.xlsx" %>%
+#   path_real()
+# a$dir_fq <-
+#   "/data1/Mgiseq2000/R2100410220091" %>%
+#   path_real()
+# a$dir_out <-
+#   "/data1/suna/merge_fq/test_output" %>%
+#   dir_create() %>%
+#   path_real()
+# a$nthreads <- 3L
+
+tb_input <-
+  a$input %>%
+  openxlsx::read.xlsx(sheet = 1) %>%
+  as_tibble()
+tb_cmd <-
+  SKmagUtilsR::getcmd_merge_fq(
+    tb_input, dir_fq = a$dir_fq, dir_out = a$dir_out
+  )
+
+if (!a$dry_run) {
+  cmds <-
+    tb_smp %>%
+    select(starts_with(".cmd_merge")) %>%
+    tidyr::pivot_longer(cols = everything()) %>%
+    pull(value)
+  exit_codes <- SKmagUtilsR::fire_up_cmds(cmds, nthreads = a$nthreads)
+  tb_excodes <-
+    tibble::tibble(
+      exit_codes = exit_codes,
+      cmds = cmds
+    ) %>%
+    vroom::vroom_write(
+      file = fs::path(a$dir_out, "exit_codes.csv"),
+      delim = ",",
+      na = ""
+    )
+  if (any(exit_codes != 0L)) {
+    msg <-
+      glue::glue(
+        "XIT HAPPENED!",
+        "See {a$dir_out}/exit_codes.csv for more details.",
+        .sep = "\n"
+      )
+    rlang::abort(msg)
+  }
+}
+
+tb_output <-
+  tb_smp %>%
+  transmute(
+    sample = sample_id,
+    group = 0L,
+    short_reads_1 = .fq1_out %>% path_abs(),
+    short_reads_2 = .fq2_out %>% path_abs(),
+    long_reads = NA_character_
+  ) %>%
+  vroom::vroom_write(
+    file = fs::path(a$dir_out, "samplesheet.csv"),
+    delim = ",",
+    na = ""
+  )
