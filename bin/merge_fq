@@ -3,7 +3,12 @@
 # init ----
 
 a <- new.env(parent = emptyenv())
-renv::activate("~/proj/SKmagUtilsR")
+a$lib_path <-
+  "/home/r/proj/SKmagUtilsR/renv/library/R-4.1/x86_64-pc-linux-gnu/"
+a$wd <- "/home/r/work/"
+
+setwd(a$wd)
+.libPaths(a$lib_path)
 
 suppressPackageStartupMessages(library(optparse))
 suppressPackageStartupMessages(library(glue))
@@ -16,7 +21,7 @@ suppressPackageStartupMessages(library(dplyr))
 suppressPackageStartupMessages(library(fs))
 suppressPackageStartupMessages(library(vroom))
 
-pkgload::load_all(path = "~/proj/SKmagUtilsR", export_all = FALSE)
+suppressPackageStartupMessages(library(SKmagUtilsR))
 
 # args ----
 
