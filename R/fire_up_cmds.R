@@ -4,7 +4,6 @@
 #'
 #' @return The return value, if any, from executing the function.
 #'
-#' @noRd
 #' @export
 fire_up_cmds <- function(cmds, nthreads = NULL) {
   requireNamespace("future", quietly = TRUE)
@@ -22,12 +21,12 @@ fire_up_cmds <- function(cmds, nthreads = NULL) {
       .f = ~ system(.x)
     )
   } else {
-    my_future_plan <- list(future::tweak(multicore, workers = nthreads))
-    future::plan(my_future_plan)
+    my_plan <- list(future::tweak(future::multicore, workers = nthreads))
+    future::plan(my_plan)
     exit_codes <- furrr::future_map_int(
       .x = cmds,
       .f = ~ system(.x),
-      .options = furrr_options()
+      .options = furrr::furrr_options()
     )
   }
   return(exit_codes)
