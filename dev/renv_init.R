@@ -26,7 +26,9 @@ pkgs_needed <- c(
   "rmarkdown",
   "devtools",
   "usethis",
-  "testthat"
+  "testthat",
+
+  "tidyjson"
 )
 
 renv::install(packages = pkgs_needed)

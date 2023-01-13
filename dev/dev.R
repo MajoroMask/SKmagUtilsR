@@ -23,9 +23,17 @@ usethis::use_package("tidyselect")
 usethis::use_package("ggplot2")
 usethis::use_package("tibble")
 usethis::use_package("tidyr")
+usethis::use_package("stringr")
 usethis::use_package("purrr")
+usethis::use_package("forcats")
+usethis::use_package("vroom")
 usethis::use_package("glue")
 usethis::use_package("fs")
+usethis::use_package("lubridate")
+
+usethis::use_package("tidyjson")
+usethis::use_package("furrr")
+usethis::use_package("future")
 
 ## Add global imports
 
@@ -36,8 +44,9 @@ usethis::use_import_from("glue", "glue")
 
 ## Add functions ----
 
-golem::add_fct("merge_fq", with_test = TRUE)
-golem::add_fct("fire_up_cmds", with_test = TRUE)
+# golem::add_fct("merge_fq", with_test = TRUE)
+# golem::add_fct("fire_up_cmds", with_test = TRUE)
+# golem::add_fct("organize_fastp_json", with_test = TRUE)
 
 ## Add internal datasets ----
 
