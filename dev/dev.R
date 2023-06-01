@@ -36,6 +36,8 @@ usethis::use_package("tidyjson")
 usethis::use_package("furrr")
 usethis::use_package("future")
 
+usethis::use_package("rentrez")
+
 ## Add global imports
 
 # these #' @importFrom will be in R/pkg-package.R

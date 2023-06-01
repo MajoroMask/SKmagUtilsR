@@ -111,6 +111,14 @@
       "Hash": "32e79b908fda56ee57fe518a8d37b864",
       "Requirements": []
     },
+    "XML": {
+      "Package": "XML",
+      "Version": "3.99-0.14",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "e5c8af79df616c135b21eaeb1dc6bc5c",
+      "Requirements": []
+    },
     "askpass": {
       "Package": "askpass",
       "Version": "1.1",
@@ -1167,6 +1175,18 @@
       "Repository": "RSPM",
       "Hash": "227045be9aee47e6dda9bb38ac870d67",
       "Requirements": []
+    },
+    "rentrez": {
+      "Package": "rentrez",
+      "Version": "1.2.3",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "90e6d8dc1b2fe96d0753a94943cf604d",
+      "Requirements": [
+        "XML",
+        "httr",
+        "jsonlite"
+      ]
     },
     "renv": {
       "Package": "renv",

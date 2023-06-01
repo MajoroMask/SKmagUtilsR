@@ -8,4 +8,5 @@
 ## usethis namespace: end
 #' @import rlang
 #' @import dplyr
+#' @importFrom rentrez entrez_search entrez_summary entrez_fetch
 NULL

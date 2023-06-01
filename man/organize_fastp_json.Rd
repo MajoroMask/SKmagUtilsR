@@ -4,7 +4,7 @@
 \alias{organize_fastp_json}
 \title{organize_fastp_json}
 \usage{
-organize_fastp_json(json, col_split = ".", dump_cols_keyworkds = NULL)
+organize_fastp_json(json)
 }
 \value{
 The return value, if any, from executing the function.
