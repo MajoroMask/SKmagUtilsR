@@ -16,7 +16,7 @@ download_ncbi_genome <- function(tax_id, path) {
   if (targets$count == 0L) {
     rlang::abort("Xit happens: `entrez_search()` find nothing.")
   }
-  target_sum <- rentrez::entrez_summary(db = "nuccore", id = x$ids[1])
+  target_sum <- rentrez::entrez_summary(db = "nuccore", id = targets$ids[1])
   target_seq <- rentrez::entrez_fetch(
     db = "nuccore",
     id = target_sum$accessionversion,
