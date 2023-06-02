@@ -4,12 +4,12 @@
 \alias{download_ncbi_genome}
 \title{Download virus genome from NCBI API}
 \usage{
-download_ncbi_genome(tax_id, path)
+download_ncbi_genome(tax_id, max_errors = 5L)
 }
 \arguments{
 \item{tax_id}{The taxonomy ID of target virus.}
 
-\item{path}{Where to save the fasta file.}
+\item{max_errors}{Max try repeats.}
 }
 \value{
 invisible(NULL)

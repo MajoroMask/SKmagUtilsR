@@ -23,6 +23,7 @@ Imports:
     lubridate,
     magrittr,
     purrr,
+    RCurl,
     readr,
     rentrez,
     rlang,
@@ -31,5 +32,6 @@ Imports:
     tidyjson,
     tidyr,
     tidyselect,
+    utils,
     vroom
 RoxygenNote: 7.1.2

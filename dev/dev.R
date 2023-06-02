@@ -37,6 +37,8 @@ usethis::use_package("furrr")
 usethis::use_package("future")
 
 usethis::use_package("rentrez")
+usethis::use_package("utils")
+usethis::use_package("RCurl")
 
 ## Add global imports
 
