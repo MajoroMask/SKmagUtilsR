@@ -13,7 +13,7 @@ download_ncbi_genome <- function(tax_id, max_errors = 5L) {
   # method 1: nuccore ----
   # targets <- rentrez::entrez_search(
   #   db = "nuccore",
-  #   term = glue::glue("txid{arg_from_cmd$tax_id}[Organism:exp]")
+  #   term = glue::glue("txid{tax_id}[Organism:exp]")
   # )
   # if (targets$count == 0L) {
   #   rlang::abort("Xit happens: `entrez_search()` find nothing.")
@@ -54,7 +54,7 @@ download_ncbi_genome <- function(tax_id, max_errors = 5L) {
   assemblies <- retry(
     rentrez::entrez_search(
       db = "assembly",
-      term = glue::glue("txid{arg_from_cmd$tax_id}[Organism:exp]")
+      term = glue::glue("txid{tax_id}[Organism:exp]")
     ),
     max_errors = max_errors
   )
@@ -103,7 +103,12 @@ download_ncbi_genome <- function(tax_id, max_errors = 5L) {
     )
 
   # download genome.fna.gz from NCBI ftp
-  ftp_url <- stringr::str_c(tb_assemblies$ftppath_refseq[1], "/")
+  ftp_url <-
+    rbind(tb_assemblies$ftppath_refseq, tb_assemblies$ftppath_genbank) %>%
+    c() %>%
+    `[`(. != "") %>%
+    `[`(1) %>%
+    stringr::str_c(., "/")
   ftp_contents <- retry(
     RCurl::getURL(
       url = ftp_url,
