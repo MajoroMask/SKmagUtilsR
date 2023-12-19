@@ -4,27 +4,27 @@
     "Repositories": [
       {
         "Name": "BioCsoft",
-        "URL": "https://mirrors.tuna.tsinghua.edu.cn/bioconductor/packages/3.14/bioc"
+        "URL": "https://bioconductor.org/packages/3.14/bioc"
       },
       {
         "Name": "BioCann",
-        "URL": "https://mirrors.tuna.tsinghua.edu.cn/bioconductor/packages/3.14/data/annotation"
+        "URL": "https://bioconductor.org/packages/3.14/data/annotation"
       },
       {
         "Name": "BioCexp",
-        "URL": "https://mirrors.tuna.tsinghua.edu.cn/bioconductor/packages/3.14/data/experiment"
+        "URL": "https://bioconductor.org/packages/3.14/data/experiment"
       },
       {
         "Name": "BioCworkflows",
-        "URL": "https://mirrors.tuna.tsinghua.edu.cn/bioconductor/packages/3.14/workflows"
+        "URL": "https://bioconductor.org/packages/3.14/workflows"
       },
       {
         "Name": "BioCbooks",
-        "URL": "https://mirrors.tuna.tsinghua.edu.cn/bioconductor/packages/3.14/books"
+        "URL": "https://bioconductor.org/packages/3.14/books"
       },
       {
         "Name": "CRAN",
-        "URL": "https://mirrors.tuna.tsinghua.edu.cn/CRAN/"
+        "URL": "https://mirrors.tuna.tsinghua.edu.cn/CRAN"
       }
     ]
   },
@@ -2017,6 +2017,17 @@
         "withr"
       ],
       "Hash": "79540e5fcd9e0435af547d885f184fd5"
+    },
+    "timechange": {
+      "Package": "timechange",
+      "Version": "0.2.0",
+      "Source": "Repository",
+      "Repository": "RSPM",
+      "Requirements": [
+        "R",
+        "cpp11"
+      ],
+      "Hash": "8548b44f79a35ba1791308b61e6012d7"
     },
     "tinytex": {
       "Package": "tinytex",
